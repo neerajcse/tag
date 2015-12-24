@@ -3,6 +3,7 @@
  * Mongoose and mongodb settings.
 **/
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 User_Schema = new mongoose.Schema({
 	username: String,
 	firstName: String,
