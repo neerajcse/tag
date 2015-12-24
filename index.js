@@ -35,7 +35,7 @@ app.use(bodyParser.json())
   })
   .get('/api/users', function (req, res) {
     User.find( function ( err, users ){
-      res.json(200, todos);
+      res.json(200, users);
     });
   })
   .post('/api/user', function (req, res) {
@@ -71,7 +71,7 @@ app.use(bodyParser.json())
     // http://mongoosejs.com/docs/api.html#model_Model.findById
     User.findById( req.params.id, function ( err, user ) {
       // http://mongoosejs.com/docs/api.html#model_Model.remove
-      todo.remove( function ( err, user ){
+      user.remove( function ( err, user ){
         res.json(200, {msg: 'OK'});
       });
     });
