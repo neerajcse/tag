@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "ejs": "2.3.3",
-    "express": "4.13.3"
+    "express": "4.13.3",
+    "mongoose": "^4.3.4",
+    "body-parser": "^1.14.2"
   },
   "engines": {
     "node": "0.12.7"
@@ -22,5 +24,9 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "body-parser": "^1.14.2",
+    "mongoose": "^4.3.4"
+  }
 }
