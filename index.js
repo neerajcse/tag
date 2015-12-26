@@ -3,14 +3,33 @@
  * Mongoose and mongodb settings.
 **/
 var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
 User_Schema = new mongoose.Schema({
 	username: String,
 	firstName: String,
-	lastName: String
+	lastName: String,
+	updated: { type: Date, default: Date.now },
+	created: Date,
+	_Id: Schema.Types.ObjectId,
+});
+
+Device_Schema = new mongoose.Schema({
+	userName: String, 
+	bluetoothAddress: String,
+	type: String,
+	currentLocation: String,
+	toLocate: Boolean,
+	reportFound: Boolean,
+});
+
+Subscription_Schema = new mongoose.Schema({
+	userName: String,
+	validTill: Date,
+	deviceId: Schema.Types.ObjectId
 });
 
 User = mongoose.model('User', User_Schema);
+Device = mongoose.model('Device', Device_Schema);
+Subscription = mongoose.model('Subscription', Subscription_Schema);
 
 mongoose.connect("mongodb://user1:titansdevil@ds043991.mongolab.com:43991/tag-neerajcse", function (error) {
     if (error) console.error(error);
@@ -19,9 +38,10 @@ mongoose.connect("mongodb://user1:titansdevil@ds043991.mongolab.com:43991/tag-ne
 
 
 /**
- * Express js settings and routes
+ * Express js settings and routes.
 **/
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -75,6 +95,36 @@ app.use(bodyParser.json())
         res.json(200, {msg: 'OK'});
       });
     });
+  })
+  .post('/api/devices/', function(req, res) {
+  	User.findById( req.body.userName, function( err, user) {
+  		if(err !=null || user == null || user == undefined) {
+  			res.json(404, {msg: 'User not found'});
+  		} else {
+  			Subscription.find({userName: user.userName, device: null}, function(err, subscriptions)) {
+  				if(subscriptions.length == 0) {
+  					res.json(501, 'Please add more subscriptions to add a new device.');
+  				} else {
+  					var device = new Device( req.body );
+  					subscriptions[0].device = device._id;
+  					subscriptions[0].userName = userName;
+  				}
+  			}
+  		}
+  	}))
+  	.put('/api/devices/:deviceId', function(req, res) {
+  		Device.findById( req.params.deviceId, function(err, device) {
+  			device.type = req.body.type;
+  			device.save(function(err, device) {
+  				res.json(200, {msg: 'Device updated'});
+  			});
+  		})
+  	})
+  	.get('/api/devices/:deviceId', function( req, res) {
+  		Device.findById( req.params.deviceId, function( err, device) {
+  			res.json(200, device);
+  		});
+  	});
   });
 
 app.listen(app.get('port'), function() {
