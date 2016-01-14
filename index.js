@@ -31,7 +31,7 @@ User = mongoose.model('User', User_Schema);
 Device = mongoose.model('Device', Device_Schema);
 Subscription = mongoose.model('Subscription', Subscription_Schema);
 
-mongoose.connect("mongodb://user1:titansdevil@ds043991.mongolab.com:43991/tag-neerajcse", function (error) {
+mongoose.connect("mongodb://userxyz:123@ds043991.mongolab.com:43991/tag-neerajcse", function (error) {
     if (error) console.error(error);
     else console.log('mongo connected');
 });
